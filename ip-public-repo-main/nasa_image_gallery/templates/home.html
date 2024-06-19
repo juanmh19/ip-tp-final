@@ -1,0 +1,460 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header__caja">
+            <div class="header__contenedor">
+                <form action="{% url 'buscar' %}" method="POST">
+                    {% csrf_token %}
+                    <input class="header__buscador" type="search" name="query" placeholder="Tu busqueda" aria-label="Search">
+                </form>
+                <div class="header__contenedor--icono">
+                    <img id="header__icono" class="header__icono" src="/static/icons8-search-50.png" alt="">
+                </div>
+            </div>
+        </div>
+        <nav class="header__nav" id="header__nav">
+            <a href="" class="header__a">Home</a>
+            <a href="" class="header__a">Imagenes</a>
+            <a href="" class="header__a">Favoritos</a>
+            <a href="" class="header__a header__a--inicio">Iniciar Sesion</a>
+        </nav>
+        <img id="menu" class="header__menu header__icono" src="/static/menu.png" alt="">
+        <div class="header__caja header__caja--icono">
+            <img class="header__icono header__perfil" src="/static/icons8-male-user-50.png" alt="">
+            <div class="header__caja--perfil">
+                <div class="no__autenticado">
+                    <a class="header__a" href="">Registrarse</a>
+                </div>
+                <div class="autenticado">
+                    <a class="header__a" href="">Perfil</a>
+                    <a class="header__a" href="">Favoritos</a>
+                    <a class="header__a" href="">Finalizar</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="cajaIcono">
+        <div class="cajaIcono__circulo">
+            <div class="cajaIcono__imagenes">
+                <img class="cajaIcono__imagen" src="/static/rojopng.png" alt="">
+                <img id="astronauta" class="cajaIcono__imagen"
+                    src="/static/NASA WALLPAPER em 2022 _ Tela de fundo, Vingadores… (1) (1).png" alt="">
+            </div>
+        </div>
+    </div>
+    <section class="hero">
+        <div class="hero__cajaIzquierda">
+            <h1 class="hero__h1">LA NASA<br>Todas las imagenes <br>en un mismo lugar</h1>
+            <p class="hero__p">Podras hallar las mejores imagenes captadas aqui</p>
+            <button class="hero__boton">Continuar</button>
+        </div>
+        <div></div>
+    </section>
+
+    <section class="imagenes">
+        <div>
+            <h2 class="imagenes__h2">Elegí las mejores</h2>
+        </div>
+        <div class="imagenes__caja--grid">
+            {% for imagen in images %}
+            <div class="imagenes__cajaImagenes">
+                <img class="imagenes__imagen" src="{{ imagen.image_url }}" alt="imagen">
+                <div class="imagenes__cajaTitulo">
+                    <p class="imagenes__titulo">{{ imagen.title }}</p>
+                    {% if imagen.id in favourite_list %}
+                    <img class="imagenes__guardado" src="/static/saveSeleccionado.png" alt="">
+                    {% else %}
+                    <img class="imagenes__guardado" src="/static/guardado.png" alt="">
+                    {% endif %}
+                </div>
+                <p class="imagenes__descripcion">{{ imagen.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <footer></footer>
+
+    <script>
+        astronauta.addEventListener('dragstart', e=> {
+    event.preventDefault(); // Previene el arrastre de la imagen
+});
+
+
+activado = false
+menu.addEventListener("click", e => {
+    if (activado == false) {
+        header__nav.classList.add("menu__abierto");
+        activado = true
+    }else{
+        header__nav.classList.remove("menu__abierto");
+        activado = false
+    }
+});
+    </script>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:wght@100..900&family=Roboto&display=swap');
+
+* {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style: none;
+}
+
+:root{
+    --principal: #D50000;
+}
+
+.header {
+    z-index: 1;
+    position: fixed;
+    height: 10vh;
+    left: 0;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: black;
+    .header__caja {
+        display: flex;
+        align-items: center;
+    }
+
+    .header__contenedor {
+        transform: translate(-50%,-50%);
+        padding: 10px;
+    }
+    
+    .header__buscador {
+        position: absolute;
+        outline: none;
+        box-sizing: border-box;
+        height: 40px;
+        width: 0px;
+        padding: 0 20px;
+        top: 0px;
+        left: -21px;
+        color: #000;
+        border-radius: 50px;
+        font-size: 20px;
+        border: 1px solid var(--principal);
+        transition: all .7s ease;
+    }
+    
+    .header__contenedor--icono {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        width: 40px;
+        height:40px;
+        background: var(--principal);
+        line-height: 80px;
+        border-radius: 50%;
+        text-align: center;
+        cursor: pointer;
+        transition: .5s;
+    }
+    
+    .header__contenedor:hover .header__buscador {
+        width: 250px;
+        padding: 0 50px;
+    }
+    
+    .header__nav {
+        margin-right: -40px;
+    }
+    .header__a{
+        color: #fff;
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0 20px;
+        position: relative;
+    }
+    .header__a--inicio {
+        display: none;
+    }
+    .header__a::after {
+        z-index: 99;
+        content: "";
+        position: absolute;
+        bottom: 0px;
+        top: 25px;
+        left: 0;
+        width: 0;
+        height: 3px;
+        background-color: var(--principal);
+        transition: width 0.5s;
+    }
+    
+    .header__a:hover::after {
+        width: 100%;
+    }
+    .header__icono {
+        cursor: pointer;
+        width: 35px;
+    }
+    .header__menu {
+        display: none;
+    }
+    /* .header__perfil {
+        background-color: var(--principal);
+        border-radius: 100%;
+        padding: 5px;
+    } */
+    @media (max-width: 680px) {
+        .header__menu {
+            display: flex;
+        }
+        .header__caja--icono {
+            display: none;
+        }
+        .header__nav {
+            display: none;
+        }
+    }
+    .header__menu:hover .header__nav{
+        display: flex;
+    }
+}
+.menu__abierto{
+    display: flex!important;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    position: absolute;
+    height: 90vh;
+    width: 100%;
+    left: 0;
+    background-color: #080808;
+    top: 60px;
+    .header__a--inicio{
+        display: flex;
+    }
+}
+.header__caja--perfil {
+    display: none;
+    position: relative;
+    top: 9vh;
+    right: 100px;
+    height: 100%;
+    width: 10rem;
+    background-color: #080808;
+}
+
+.no__autenticado {
+    margin: 20px 0;
+}
+
+.autenticado {
+    display: none;
+    height: 90%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.cajaIcono {
+    z-index: 0;
+    margin-top: -7vh;
+    display: flex;
+    justify-content: center;
+    .cajaIcono__circulo{
+        background-image: url();
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: end;
+        justify-content: center;
+        position: fixed;
+        height: 12rem;
+        width: 12rem;
+        background-color: black;
+        border-radius: 0 0 160% 160%;
+    }
+    .cajaIcono__imagen{
+        width: 12rem;
+    }
+    .cajaIcono__imagen:first-child{
+        border-radius: 100%;
+        width: 7rem;
+        position: relative;
+        top: 345px;
+        left: 40px;
+    }
+    .cajaIcono__imagen:last-child{
+        position: relative;
+        top: 150px;
+        user-select: none;
+        animation: imagen 3s linear infinite;
+    }
+}
+
+@keyframes imagen {
+    0% {
+        transform: rotateZ(0deg);
+    }
+    35% {
+        transform: rotateZ(20deg);
+    }
+    70%{
+        transform: rotateZ(-20deg);
+    }
+    100%{
+        transform: rotateZ(0deg);
+    }
+}
+
+.hero {
+    display: flex;
+    align-items: center;
+    margin-top: 17vh;
+    background-image: url(/static/space1.jpg)!important;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 90vh;
+    .hero__cajaIzquierda{
+        color: #fff;
+        margin-left: 40px;
+    }
+    .hero__h1{
+        font-size: 48px;
+    }
+    .hero__p{
+        margin: 10px 0;
+    }
+    .hero__boton{
+        background-color: var(--principal);
+        border: none;
+        color: #fff;
+        height: 40px;
+        width: 10rem;
+        border-radius: 8px;
+        font-size: 18px;
+    }
+    .hero__boton:hover{
+        cursor: pointer;
+        background-color: rgba(194, 2, 2, 0);
+        border: 1px solid var(--principal);
+        transition: 0.5s;
+    }
+}
+
+.imagenes {
+    height: 100%;
+    background-color: #080808;
+    .imagenes__h2 {
+        font-size: 48px;
+        text-align: center;
+        color: #fff;
+        padding: 40px 0;
+    }
+    .imagenes__cajaTitulo {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        align-content: center;
+        text-align: center;
+        height: 60px;
+    }
+    .imagenes__guardado {
+        width: 35px;
+        height: 35px;
+        margin-right: 20px;
+        cursor: pointer;
+        position: relative;
+        z-index: 50;
+    }
+    .imagenes__guardado:hover{
+        transform: scale(1.1);
+    }
+    .imagenes__caja--grid{
+            display: grid;
+            justify-items: center;
+            grid-template-columns: repeat(3, 33.33%) ;
+            grid-template-rows: repeat(2, 1fr) 0;
+            grid-column-gap: 0px;
+            grid-row-gap: 20px;
+            color: #fff;
+    }
+    .imagenes__cajaImagenes{
+        color: black;
+        background-color: #ffffff;
+        width: 90%;
+        height: 100%;
+        border-radius: 20px;
+    }
+    .imagenes__imagen {
+        width: 100%;
+        height: 20rem;
+        border-radius: 20px 20px 0 0;
+    }
+    .imagenes__titulo {
+        margin: 0 0 0 20px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    .imagenes__descripcion {
+        margin: 0 20px 20px 20px;
+    }
+}
+
+::-webkit-scrollbar {
+    background-color: #080808;
+    width: 25px;
+}
+
+::-webkit-scrollbar-thumb {
+            background-image: url(/static/cohete4.png); /* Imagen normal */
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            height: 10rem;
+        }
+
+        /* Estilo para cuando la barra de desplazamiento está activa */
+        .scrolling::-webkit-scrollbar-thumb {
+            background-image: url(/static/cohete4Vuelta.png); /* Imagen volteada */
+            transform: rotate(180deg); /* Voltea la imagen */
+        }
+</style>
+<script>
+
+var lastScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+window.addEventListener('scroll', function() {
+    var thumb = document.querySelector('::-webkit-scrollbar-thumb');
+    var currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (currentScrollPosition > lastScrollPosition) {
+        document.body.classList.add('scrolling');
+    } else {
+        document.body.classList.remove('scrolling');
+    }
+
+    lastScrollPosition = currentScrollPosition;
+});
+
+
+</script>
+</body>
+
+</html>
